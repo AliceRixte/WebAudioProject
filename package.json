@@ -1,0 +1,9 @@
+{
+  "name": "web-audio-project",
+  "version": "0.0.0",
+  "description": "WebAudioProject",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  }
+}
