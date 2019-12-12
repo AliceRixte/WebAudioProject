@@ -1,6 +1,13 @@
+import * as manageFiles from '/js/manageFiles.js';
+
 const audioContext = new AudioContext(); //crée context audio
 const $btn = document.querySelector('button'); //donner elt button avec semble de functionnalité
 let resumed = false;
+
+console.log("Index loaded");
+for (let file of manageFiles.getAllFileNames('/resources/Test1')){
+    console.log(file);
+};
 
 const callback = async function () {
     if (!resumed) {
