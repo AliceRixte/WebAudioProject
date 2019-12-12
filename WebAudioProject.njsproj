@@ -34,17 +34,16 @@
     <Content Include="public\index.js" />
     <Content Include="README.md" />
     <Content Include="app.js" />
-    <Content Include="public\js\manageFiles.js">
+    <Content Include="src\manageFiles.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="src\server.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\" />
     <Folder Include="public\js\" />
-    <Folder Include="resources\" />
-    <Folder Include="resources\Test1\" />
-    <Folder Include="resources\Test2\" />
+    <Folder Include="public\sounds\" />
+    <Folder Include="public\sounds\Test1\" />
+    <Folder Include="public\sounds\Test2\" />
     <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
