@@ -11,7 +11,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>44d6befb-1ee7-4d05-b2c1-91e352075b9f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>src\app.js</StartupFile>
+    <StartupFile>app.js</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -30,12 +30,23 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="package.json" />
+    <Content Include="public\index.html" />
+    <Content Include="public\index.js" />
     <Content Include="README.md" />
-    <Content Include="src\app.js" />
-    <Content Include="src\index.html" />
+    <Content Include="app.js" />
+    <Content Include="src\test.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\manageFiles.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\server.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="public\" />
+    <Folder Include="resources\" />
+    <Folder Include="resources\Test1\" />
+    <Folder Include="resources\Test2\" />
     <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
