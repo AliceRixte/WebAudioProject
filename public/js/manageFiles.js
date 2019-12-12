@@ -1,6 +1,6 @@
 var filesystem = require("fs");
 
-var _getAllFilesFromFolder = function (dir) {
+function getAllFileNames {
 
    
     var results = [];
@@ -10,12 +10,12 @@ var _getAllFilesFromFolder = function (dir) {
         file = dir + '/' + file;
         var stat = filesystem.statSync(file);
 
-        if (stat && stat.isDirectory()) {
-            results = results.concat(_getAllFilesFromFolder(file))
-        } else results.push(file);
-
+        if (stat && stat.isFile) {
+            results.push(file);
+        }
     });
 
     return results;
 
-};
+}
+
