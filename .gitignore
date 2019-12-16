@@ -16,6 +16,9 @@
 # Ableton live specific files
 *.asd
 
+#generated files : 
+public/fileTree.json
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
