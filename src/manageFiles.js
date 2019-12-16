@@ -19,7 +19,7 @@ function getAllFileNames(dir) {
 
 }
 
-function getAllSubdirNames(dir) {
+function getAllSubDirNames(dir) {
 
 
     var results = [];
@@ -38,4 +38,33 @@ function getAllSubdirNames(dir) {
 
 }
 
-exports.getAllFileNames = getAllFileNames
+
+function createJSONSampleSet(dir) {
+    
+}
+
+function getPrefixPath(str) {
+    let separated = str.split('/');
+    separated.pop();
+    return "/".join(separated);
+}
+
+function createJSONSampleSets(dir) {
+    let sampleSets = getAllSubDirNames(dir);
+    let prePath = "";
+    if (sampleSets.length > 0) {
+        prePath = getPrefixPath(sampleSets[0]);
+    } else {
+        let sampleSetNames = sampleSets.map(str => {
+            let separated = str.split('/');
+            return separated[separated.length - 1];
+        });
+        console.log(sampleSetNames);
+    }
+
+
+
+}
+
+exports.createJSONSampleSet = createJSONSampleSet
+exports.createJSONSampleSets = createJSONSampleSets
