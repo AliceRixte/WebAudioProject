@@ -25,15 +25,14 @@ const max_subsets = (() => {
     }
 })();
 
-console.log(max_samples);
 // get the name of all the files in the directory dir
 function getAllFileNames(dir) {
     var results = [];
 
-    filesystem.readdirSync(dir).forEach(function (file) {
+    fs.readdirSync(dir).forEach(function (file) {
 
         file = dir + '/' + file;
-        var stat = filesystem.statSync(file);
+        var stat = fs.statSync(file);
 
         if (stat && stat.isFile()) {
             results.push(file);
@@ -57,7 +56,6 @@ function getAllSubDirNames(dir) {
             results.push(file);
         }
     });
-
     return results;
 }
 
@@ -79,26 +77,37 @@ function getPostfixPath(str) {
 }
 
 //create a dictionnary based on the sample set contained by path
+function browseSampleSubSet(path) {
+    let samples = getAllFileNames(path);
+    let sample_subset_name = getPostfixPath(path);
+
+    if (samples.length <= 0) {
+        console.log("No sample found in the subset " + sample_subset_name);
+        return null;
+    } else if (samples.length > max_samples) {
+        console.log("To samples in the subset \"" + sample_subset_name + "\". Some samples will be ignored.");
+        samples.slice(0, max_samples);
+    }
+    return samples.map(getPostfixPath);
+}
+
+
 function browseSampleSet(path) {
     let sample_subsets = getAllSubDirNames(path);
     let sample_set_name = getPostfixPath(path);
-
     if (sample_subsets.length <= 0) {
         console.log("No sample subset found in " + sample_set_name);
-    } /*else if (sample_subsets.length >)
-
-    if (sample_subsets.length > 0 && sample_subsets.length <= 4) {
-        let pre_path = getPrefixPath(sample_sets[0]);
-        console.log(pre_path);
-
-        var dict_path = {};
-        sample_sets.forEach((sample_set_path) => {
-            let sample_set_name = getPostfixPath(sample_set_path);
-            dict_path[sample_set_name] = browseSampleSet(sample_set_path);
-        });
-    } else {
-        console.log("No sample set found.");
-    }*/
+        return null;
+    } else if (sample_subsets.length > max_subsets) {
+        console.log("To much subsets in the set \"" + sample_set_name + "\". Some subsets will be ignored.");
+        sample_subsets = sample_subsets.slice(0, max_subsets);
+    } 
+    var dict_path = {};
+    sample_subsets.forEach((sample_subset_path) => {
+        let sample_subset_name = getPostfixPath(sample_subset_path);
+        dict_path[sample_subset_name] = browseSampleSubSet(sample_subset_path);
+    });
+    return dict_path;
 }
 
 //Create a JSON file containing information for the public js to browse in the file hierarchy
@@ -114,12 +123,17 @@ function createJSONSampleSets(dir) {
             let sample_set_name = getPostfixPath(sample_set_path);
             dict_path[sample_set_name] = browseSampleSet(sample_set_path);
         });
+        json_dict = {
+            "path_to_sounds": pre_path,
+            "sample_sets": dict_path
+        };
+
+        console.log(JSON.stringify(json_dict));
+
+        fs.writeFileSync("./public/fileTree.json", JSON.stringify(json_dict));
     } else {
         console.log("No sample set found.");
     }
-
-
-
 }
 
 exports.createJSONSampleSets = createJSONSampleSets
