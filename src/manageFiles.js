@@ -61,7 +61,7 @@ function getAllSubDirNames(dir) {
 
 
 
-//get the prefix to add in the public js files 
+//get the prefix to add in the public js files
 function getPrefixPath(str) {
     let separated = str.split('/');
     let publicIndex = separated.findIndex(el => el == "public");
@@ -101,7 +101,7 @@ function browseSampleSet(path) {
     } else if (sample_subsets.length > max_subsets) {
         console.log("To much subsets in the set \"" + sample_set_name + "\". Some subsets will be ignored.");
         sample_subsets = sample_subsets.slice(0, max_subsets);
-    } 
+    }
     var dict_path = {};
     sample_subsets.forEach((sample_subset_path) => {
         let sample_subset_name = getPostfixPath(sample_subset_path);
@@ -130,7 +130,8 @@ function createJSONSampleSets(dir) {
 
         console.log(JSON.stringify(json_dict));
 
-        fs.writeFileSync("./public/fileTree.json", JSON.stringify(json_dict));
+        //fs.writeFileSync("./public/fileTree.json", JSON.stringify(json_dict));
+        return json_dict;
     } else {
         console.log("No sample set found.");
     }
