@@ -1,16 +1,5 @@
-//import * as manageFiles from '/js/manageFiles.js';
-import * as loadFiles from "/js/loadFiles.js"
-const audioContext = new AudioContext(); //crée context audio
-const $btn = document.querySelector('button'); //donner elt button avec semble de functionnalité
-let resumed = false;
+import * as manageFiles from '/js/manageFiles.js';
 
-//load json file from server
-var file_tree;
-fetch('/fileTree.json')
-    .then(response => response.json())
-    .then(jsonResponse => file_tree = jsonResponse);
-
-var set_list = document.createElement("select");
 
 const callback = async function () {
     if (!resumed) {
@@ -41,4 +30,23 @@ const callback = async function () {
     env.gain.exponentialRampToValueAtTime(0.0001, now + 3);
 };
 
-$btn.addEventListener('click', callback);
+
+
+
+
+const main = async () => {
+    const audioContext = new AudioContext(); //crï¿½e context audio
+    const $btn = document.querySelector('button'); //donner elt button avec semble de functionnalitï¿½
+    let resumed = false;
+    var $choose_sample_set = document.createElement("SELECT");
+
+    const file_tree = await manageFiles.getJSON("/fileTree.json");
+    var $choose_sample_set = document.createElement("select");
+    Object.keys(file_tree["sample_sets"]).forEach(key => {
+        var $option = document.createElement("option");
+        $option.text = key;
+        $choose_sample_set.add($option);
+    });
+    document.querySelector("body").appendChild($choose_sample_set);
+}
+window.addEventListener('load', main);
