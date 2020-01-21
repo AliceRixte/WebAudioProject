@@ -1,18 +1,15 @@
 import * as manageFiles from '/js/manageFiles.js';
 
 
+
+const audioContext = new AudioContext(); //crée context audio
+let resumed = false;
+
 const callback = async function () {
     if (!resumed) {
         await audioContext.resume();
         resumed = true;
     }
-    Object.keys(file_tree["sample_sets"]).forEach((key) => {
-        var new_option = document.createElement("option");
-        new_option.text = key;
-        set_list.add(new_option);
-    })
-    document.querySelector("body").append(set_list);
-    
     const now = audioContext.currentTime;
 
     const env = audioContext.createGain();
@@ -32,12 +29,11 @@ const callback = async function () {
 
 
 
-
-
 const main = async () => {
-    const audioContext = new AudioContext(); //crï¿½e context audio
-    const $btn = document.querySelector('button'); //donner elt button avec semble de functionnalitï¿½
-    let resumed = false;
+
+    const $btn = document.querySelector('button'); //donner elt button avec semble de functionnalité
+    $btn.addEventListener("click", callback);
+
     var $choose_sample_set = document.createElement("SELECT");
 
     const file_tree = await manageFiles.getJSON("/fileTree.json");
