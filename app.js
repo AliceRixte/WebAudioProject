@@ -15,14 +15,19 @@ app.get(root, (req, res) => {
 });
 
 app.get('/fileTree.json', (req, res) => {
-    console.log('Couscous');
+    res.set('Content-Type', 'application/json');
     res.json(fileTree);
 }
 );
 
+app.get('*.wav', (req, res) => {
+    console.log("wav asked");
+});
+
 app.get('*', (req, res) => {
     console.log("404 : don't know this request ");
 });
+
 
 app.listen(port, () => {
     console.log(`Listening to requests on http://localhost:${port}`);

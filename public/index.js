@@ -43,6 +43,22 @@ const main = async () => {
         $option.text = key;
         $choose_sample_set.add($option);
     });
+
+
+
+    const audioContext = new AudioContext(); //crée context audio
+    let resumed = false;
+
+    if (!resumed) {
+        await audioContext.resume();
+        resumed = true;
+    }
+
+    var source = await manageFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audioContext);
+    source.start(0);
+    source.stop(1);
+    const sample_set = await manageFiles.loadSampleSet
+
     document.querySelector("body").appendChild($choose_sample_set);
 }
 window.addEventListener('load', main);
