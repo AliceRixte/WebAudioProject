@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const manageFiles = require('./src/manageFiles.js');
-manageFiles.createJSONSampleSets('./public/sounds');
+const fileTree = manageFiles.createJSONSampleSets('./public/sounds');
 
 var root = '/';
 var public_path = path.join(__dirname, 'public');
@@ -14,6 +14,12 @@ app.get(root, (req, res) => {
     res.sendFile(path.join(public_path,'index.html'));
 });
 
+app.get('/fileTree.json', (req, res) => {
+    console.log('Couscous');
+    res.json(fileTree);
+}
+);
+
 app.get('*', (req, res) => {
     console.log("404 : don't know this request ");
 });
@@ -21,4 +27,3 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
     console.log(`Listening to requests on http://localhost:${port}`);
 });
-
