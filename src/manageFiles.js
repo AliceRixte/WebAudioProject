@@ -34,7 +34,11 @@ function getAllFileNames(dir) {
         file = dir + '/' + file;
         var stat = fs.statSync(file);
 
-        if (stat && stat.isFile()) {
+        //Only keep wav files
+        var postfix = file.split('.');
+        postfix = postfix[postfix.length - 1];
+
+        if (stat && stat.isFile() && postfix == 'wav') {
             results.push(file);
         }
     });
@@ -80,7 +84,7 @@ function getPostfixPath(str) {
 function browseSampleSubSet(path) {
     let samples = getAllFileNames(path);
     let sample_subset_name = getPostfixPath(path);
-
+    //Ne garder que fichier WAV
     if (samples.length <= 0) {
         console.log("No sample found in the subset " + sample_subset_name);
         return null;
