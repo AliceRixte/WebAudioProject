@@ -3,8 +3,11 @@
   "version": "0.0.0",
   "description": "WebAudioProject",
   "main": "server.js",
+  "scripts": {
+    "sass": "node-sass -w sass -o public/css"
+  },
   "author": {
-    "name": ""
+    "name": "Th�o Golvet, Alice Rixte"
   },
   "dependencies": {
     "express": "^4.17.1"

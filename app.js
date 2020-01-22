@@ -10,6 +10,7 @@ var root = '/';
 var public_path = path.join(__dirname, 'public');
 
 app.use(express.static(public_path));
+
 app.get(root, (req, res) => {
     res.sendFile(path.join(public_path,'index.html'));
 });
