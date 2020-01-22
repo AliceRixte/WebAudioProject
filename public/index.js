@@ -2,21 +2,21 @@ import * as manageFiles from '/js/manageFiles.js';
 
 
 
-const audioContext = new AudioContext(); //crée context audio
+const audio_context = new AudioContext(); //crée context audio
 let resumed = false;
 
 const callback = async function () {
     if (!resumed) {
-        await audioContext.resume();
+        await audio_context.resume();
         resumed = true;
     }
-    const now = audioContext.currentTime;
+    const now = audio_context.currentTime;
 
-    const env = audioContext.createGain();
-    env.connect(audioContext.destination);
+    const env = audio_context.createGain();
+    env.connect(audio_context.destination);
     env.gain.value = 0;
 
-    const sine = audioContext.createOscillator();
+    const sine = audio_context.createOscillator();
     sine.connect(env);
     sine.frequency.value = 200 + 600 * Math.random();
     sine.start();
@@ -46,19 +46,21 @@ const main = async () => {
 
 
 
-    const audioContext = new AudioContext(); //crée context audio
+    const audio_context = new AudioContext(); //crée context audio
     let resumed = false;
 
     if (!resumed) {
-        await audioContext.resume();
+        await audio_context.resume();
         resumed = true;
     }
 
-    var source = await manageFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audioContext);
+    var source = await manageFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audio_context);
     source.start(0);
     source.stop(1);
-    const sample_set = await manageFiles.loadSampleSet
-
+    var current_sample_set = "Test1";
+    var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
+    const sample_set = await manageFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
+    console.log(sample_set["category_names"]);
     document.querySelector("body").appendChild($choose_sample_set);
 }
 window.addEventListener('load', main);
