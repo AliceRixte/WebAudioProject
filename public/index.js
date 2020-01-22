@@ -28,6 +28,16 @@ const callback = async function () {
 };
 
 
+const playSample = async function ( {
+    if (!resumed) {
+        await audio_context.resume();
+        resumed = true;
+    }
+
+    sampleBuffer.start(0);
+    sampleBuffer.stop(1);
+}
+
 
 const main = async () => {
 
@@ -61,5 +71,15 @@ const main = async () => {
     var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
     const sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
     document.querySelector("body").appendChild($choose_sample_set);
+
+
+    let boxes = document.querySelectorAll(".grid-cell");
+
+    const sampleBuffer = await loadFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audio_context)
+
+    Array.from(boxes, function(box) {
+      box.addEventListener("click", callback)
+    });
+
 }
 window.addEventListener('load', main);
