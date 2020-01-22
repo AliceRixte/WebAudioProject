@@ -1,8 +1,8 @@
-import * as manageFiles from '/js/manageFiles.js';
+import * as loadFiles from '/js/loadFiles.js';
 
 
 
-const audio_context = new AudioContext(); //crée context audio
+const audio_context = new AudioContext(); //crï¿½e context audio
 let resumed = false;
 
 const callback = async function () {
@@ -31,12 +31,12 @@ const callback = async function () {
 
 const main = async () => {
 
-    const $btn = document.querySelector('button'); //donner elt button avec semble de functionnalité
+    const $btn = document.querySelector('button'); //donner elt button avec semble de functionnalitï¿½
     $btn.addEventListener("click", callback);
 
     var $choose_sample_set = document.createElement("SELECT");
 
-    const file_tree = await manageFiles.getJSON("/fileTree.json");
+    const file_tree = await loadFiles.getJSON("/fileTree.json");
     var $choose_sample_set = document.createElement("select");
     Object.keys(file_tree["sample_sets"]).forEach(key => {
         var $option = document.createElement("option");
@@ -46,7 +46,7 @@ const main = async () => {
 
 
 
-    const audio_context = new AudioContext(); //crée context audio
+    const audio_context = new AudioContext(); //crï¿½e context audio
     let resumed = false;
 
     if (!resumed) {
@@ -54,13 +54,12 @@ const main = async () => {
         resumed = true;
     }
 
-    var source = await manageFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audio_context);
-    source.start(0);
-    source.stop(1);
+    //var source = await loadFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audio_context);
+    //source.start(0);
+    //source.stop(1);
     var current_sample_set = "Test1";
     var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
-    const sample_set = await manageFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
-    console.log(sample_set["category_names"]);
+    const sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
     document.querySelector("body").appendChild($choose_sample_set);
 }
 window.addEventListener('load', main);
