@@ -2,15 +2,36 @@ body {
     color: lightgray; 
 }
 
+
+.centered{
+
+}
+
 .grid-container {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     display: grid;
-    grid-template-columns: auto auto auto;
-    background-color: #2196F3;
+    width: 752px;
+    height: 752px;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    background-color: #111111;
     padding: 10px;
 }
 
+.cat-container {
+
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 25% 25% 25% 25%;
+    background-color: #000000;
+    padding: 8px;
+}
+
 .grid-cell {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.8);
     padding: 20px;
     font-size: 30px;

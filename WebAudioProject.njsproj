@@ -32,7 +32,6 @@
     <Content Include="public\index.css">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="sass\index.scss" />
     <Content Include="package.json" />
     <Content Include="public\index.html" />
     <Content Include="public\index.js" />
@@ -60,7 +59,6 @@
     <Folder Include="public\sounds\" />
     <Folder Include="public\sounds\Test1\" />
     <Folder Include="public\sounds\Test2\" />
-    <Folder Include="sass\" />
     <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
