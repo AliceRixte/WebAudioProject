@@ -45,10 +45,21 @@ export async function loadWav(url,audio_context) {
     return source;
 }
 
-export async function loadSampleSet(sample_set_tree, audio_context) {
-    var sample_set = [];
-    Object.keys(sample_set_tree).forEach(key => {
-        sample_set.push(key);
+export async function loadSampleSet(sample_set_tree, path_to_sample_set, audio_context) {
+    var sample_set = await getJSON(path_to_sample_set + "/metaData.json");
+    sample_set["samples"] = [[], [], [], []];
+    sample_set["sample_names"] = [[], [], [], []];
+    sample_set["category_names"] = [];
+
+    var i;
+    Object.keys(sample_set_tree).forEach(category => {
+        if (i < 4) {
+            sample_set["category_names"].push(category);
+            Object.keys(sample_set_tree[category]).forEach(sample => {
+
+            });
+            i++;
+        }
     });
     return sample_set;
 }
