@@ -81,7 +81,14 @@ function gridPlacement() {
     console.log(grid_size.width);
     $choose_sample_set.style.top = Math.round((top - $choose_sample_set.clientHeight) / 2).toString() + "px";
     $choose_sample_set.style.left = Math.round((window_size.width - $choose_sample_set.clientWidth) / 2).toString() + "px";
-    
+
+}
+
+function playSound(buffer, time, context) {
+  var source = context.createBufferSource();
+  source.buffer = buffer;
+  source.connect(context.destination);
+  source.start(time);
 }
 
 
@@ -124,7 +131,7 @@ const main = async () => {
         await audio_context.resume();
         resumed = true;
     }
-
+    /*
     var source = audio_context.createBufferSource();
 
     var buffer = await loadFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav");
@@ -134,6 +141,7 @@ const main = async () => {
     });
     source.start(0);
     source.stop(1);
+    */
 
     var current_sample_set = "Test1";
     var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
@@ -146,14 +154,10 @@ const main = async () => {
     categoryBox.forEach((cat, catID) => {
       Array.from(cat["children"]).forEach((box, boxID) => {
         const playSample = async function (){
-          if (!resumed) {
-              await audio_context.resume();
-              resumed = true;
-          }
-          //const sampleBuffer = loadFiles.loadWav(path_to_sample_set+"/"+category_name+"/"+sample_name+".wav", audio_context)
-          const sampleBuffer = sample_set["samples"][catID][boxID]
-          sampleBuffer.start(audio_context.currentTime);
-          sampleBuffer.stop(audio_context.currentTime + 1);
+          const sampleBuffer = sample_set["samples"][catID][boxID].slice(0)
+          audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
+              playSound(decodedData, 0, audio_context)
+          });
         }
         box.addEventListener("click", playSample)
       })
