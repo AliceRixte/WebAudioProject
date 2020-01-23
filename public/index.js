@@ -79,9 +79,13 @@ const main = async () => {
     categoryBox.forEach((cat, catID) => {
       Array.from(cat["children"]).forEach((box, boxID) => {
         const playSample = async function (){
-          //const sampleBuffer = await loadFiles.loadWav(path_to_sample_set+"/"+category_name+"/"+sample_name+".wav", audio_context)
+          if (!resumed) {
+              await audio_context.resume();
+              resumed = true;
+          }
+          //const sampleBuffer = loadFiles.loadWav(path_to_sample_set+"/"+category_name+"/"+sample_name+".wav", audio_context)
           const sampleBuffer = sample_set["samples"][catID][boxID]
-          sampleBuffer.start();
+          sampleBuffer.start(audio_context.currentTime);
           sampleBuffer.stop(audio_context.currentTime + 1);
         }
         box.addEventListener("click", playSample)
