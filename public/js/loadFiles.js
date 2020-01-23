@@ -31,18 +31,18 @@ export async function getJSON(url) {
 }
 
 
-export async function loadWav(url,audio_context) {
+export async function loadWav(url) {
     const request = new Request(url, initFromHeaders(WavHeaders));
     const response = await fetch(request);
     const buffer = await response.arrayBuffer();
-    var source = audio_context.createBufferSource();
+   /* var source = audio_context.createBufferSource();
 
     audio_context.decodeAudioData(buffer, function (decodedData) {
             source.buffer = decodedData;
             source.connect(audio_context.destination);
-    });
+    });*/
 
-    return source;
+    return buffer;
 }
 
 export async function loadSampleSet(sample_set_tree, path_to_sample_set, audio_context) {
@@ -59,7 +59,7 @@ export async function loadSampleSet(sample_set_tree, path_to_sample_set, audio_c
                 sample_set_tree[category].forEach(async sample => {
                     sample_set["sample_names"][i].push(sample);
                     var sampleURL = path_to_sample_set + "/" + category + "/" + sample;
-                    sample_set["samples"][i].push(await loadWav(sampleURL, audio_context));
+                    sample_set["samples"][i].push(await loadWav(sampleURL));
                 });
             }
 

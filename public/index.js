@@ -133,9 +133,16 @@ const main = async () => {
         resumed = true;
     }
 
-    //var source = await loadFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audio_context);
-    //source.start(0);
-    //source.stop(1);
+    var source = audio_context.createBufferSource();
+
+    var buffer = await loadFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav");
+    audio_context.decodeAudioData(buffer, function (decodedData) {
+        source.buffer = decodedData;
+        source.connect(audio_context.destination);
+    });
+    source.start(0);
+    source.stop(1);
+
     var current_sample_set = "Test1";
     var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
     const sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
@@ -144,7 +151,6 @@ const main = async () => {
 
     let boxes = document.querySelectorAll(".grid-cell");
 
-    const sampleBuffer = await loadFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audio_context)
 
     Array.from(boxes, function(box) {
       box.addEventListener("click", callback)
