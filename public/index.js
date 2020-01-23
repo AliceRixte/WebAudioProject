@@ -95,7 +95,7 @@ function playSound(buffer, time, context) {
 const main = async () => {
 
     const $grid = loadGrid();
-    console.log($grid);
+    console.log($grid[0,0]);
 
 
 
@@ -142,6 +142,7 @@ const main = async () => {
     source.start(0);
     source.stop(1);
     */
+
 
     var current_sample_set = "Test1";
     var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
