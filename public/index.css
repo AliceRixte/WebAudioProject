@@ -1,5 +1,22 @@
+:root {
+    --main-theme-color1: 0,0,0;
+    --main-theme-color2: 255,255,255;
+    --main-cat-color0-bright: 189,61,125;
+    --main-cat-color1-bright: 255,61,61;
+    --main-cat-color2-bright: 198,83,83;
+    --main-cat-color3-bright: 255,61,79;
+    --main-cat-color0-dark: 128, 0, 64;
+    --main-cat-color1-dark: 174,0,0;
+    --main-cat-color2-dark: 137,22,22;
+    --main-cat-color3-dark: 174,0,28;
+}
+
 body {
-    color: lightgray; 
+    color: black;
+    background-image: url("images/background.jpg");
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: auto;
 }
 
 
@@ -17,7 +34,7 @@ body {
     height: 752px;
     grid-template-columns: 50% 50%;
     grid-template-rows: 50% 50%;
-    background-color: #111111;
+    background-color: rgba(var(--main-theme-color1),0.2);
     padding: 10px;
 }
 
@@ -26,14 +43,40 @@ body {
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
     grid-template-rows: 25% 25% 25% 25%;
-    background-color: #000000;
+    background-color: rgba(0,0,0,0.3);
     padding: 8px;
 }
 
+#cat-0 {
+    background-color: rgba(var(--main-cat-color0-bright), 0.2);
+}
+#cat-1 {
+    background-color: rgba(var(--main-cat-color1-bright), 0.2);
+}
+#cat-2 {
+    background-color: rgba(var(--main-cat-color2-bright), 0.2);
+}
+#cat-3 {
+    background-color: rgba(var(--main-cat-color3-bright), 0.2);
+}
+
 .grid-cell {
+    background-color: rgba(0, 0, 0, 0);
+    padding: 2px
+}
+
+.inner-cell {
+    display: table;
     background-color: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    padding: 20px;
+    border-radius: 5px;
     font-size: 30px;
     text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+}
+
+span {
+    display: table-cell;
+    vertical-align: middle;
 }
