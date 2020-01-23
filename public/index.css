@@ -12,11 +12,15 @@
 }
 
 body {
+<<<<<<< HEAD
     color: black;
     background-image: url("images/background.jpg");
     background-repeat: no-repeat;
     background-position: right top;
     background-size: auto;
+=======
+    color: lightgray;
+>>>>>>> d6cfe25d440208ad0e77c3cd7ce7316ffb37aadd
 }
 
 
