@@ -30,8 +30,13 @@ const callback = async function () {
     env.gain.exponentialRampToValueAtTime(0.0001, now + 3);
 };
 
+<<<<<<< HEAD
 
 const playSample = async function () {
+=======
+/*
+const playSample = async function ( {
+>>>>>>> test_Theo
     if (!resumed) {
         await audio_context.resume();
         resumed = true;
@@ -40,6 +45,7 @@ const playSample = async function () {
     sampleBuffer.start(0);
     sampleBuffer.stop(1);
 }
+*/
 
 
 function loadGrid () {
@@ -141,14 +147,37 @@ const main = async () => {
     const sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
     document.querySelector("body").appendChild($choose_sample_set);
 
-
+    let categoryBox = Array.from(document.querySelectorAll(".cat-container"))
     let boxes = document.querySelectorAll(".grid-cell");
 
-    const sampleBuffer = await loadFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audio_context)
+    categoryBox.forEach((cat, catID) => {
+      Array.from(cat["children"]).forEach((box, boxID) => {
+        const playSample = async function (){
+          if (!resumed) {
+              await audio_context.resume();
+              resumed = true;
+          }
+          //const sampleBuffer = loadFiles.loadWav(path_to_sample_set+"/"+category_name+"/"+sample_name+".wav", audio_context)
+          const sampleBuffer = sample_set["samples"][catID][boxID]
+          sampleBuffer.start(audio_context.currentTime);
+          sampleBuffer.stop(audio_context.currentTime + 1);
+        }
+        box.addEventListener("click", playSample)
+      })
+    })
 
+    /*
     Array.from(boxes, function(box) {
-      box.addEventListener("click", callback)
+      const playSample = async function (){
+        const sampleBuffer = await loadFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav", audio_context)
+        sampleBuffer.start();
+        sampleBuffer.stop(audio_context.currentTime + 1);
+      }
+
+      box.addEventListener("click", playSample)
     });
+    */
+
 
 }
 window.addEventListener('load', main);
