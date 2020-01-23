@@ -78,7 +78,7 @@ function gridPlacement() {
     $grid_container.style.top = top.toString() + "px";
 
     const $choose_sample_set = document.getElementById("choose-sample-set");
-    console.log(grid_size.width);
+    //console.log(grid_size.width);
     $choose_sample_set.style.top = Math.round((top - $choose_sample_set.clientHeight) / 2).toString() + "px";
     $choose_sample_set.style.left = Math.round((window_size.width - $choose_sample_set.clientWidth) / 2).toString() + "px";
 
@@ -118,10 +118,7 @@ const main = async () => {
     gridPlacement();
 
 
-
     window.onresize = gridPlacement;
-
-
 
 
     const audio_context = new AudioContext(); //cr�e context audio
@@ -148,28 +145,23 @@ const main = async () => {
     const sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
     document.querySelector("body").appendChild($choose_sample_set);
 
+    console.log(sample_set["samples"][0])
+
     let categoryBox = Array.from(document.querySelectorAll(".cat-container"));
     let boxes = document.querySelectorAll(".grid-cell");
 
-    console.log(sample_set);
-    //console.log(sample_set["samples"][0][0].slice(0))
-  //  categoryBox.forEach((cat, catID) => {
-    //  Array.from(cat["children"]).forEach((box, boxID) => {
-
-    for (var i = 0; i<1; i++){
-      for (var j = 0; j<1; j++){
+    categoryBox.forEach((cat, catID) => {
+      Array.from(cat["children"]).forEach((box, boxID) => {
         const playSample = async function (){
-          console.log(sample_set["samples"][0][0])
-          console.log(i,j)
-          const sampleBuffer = sample_set["samples"][i][j].slice(0);
-          //console.log(sample_set["samples"][0][0]);
+          const sampleBuffer = sample_set["samples"][catID][boxID].slice(0)
           audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
               playSound(decodedData, 0, audio_context)
           });
         }
-        $grid[i][j].addEventListener("click", playSample)
-      }
-    }
+        $grid[catID][boxID].addEventListener("click", playSample)
+      })
+    })
+
 
 
 }

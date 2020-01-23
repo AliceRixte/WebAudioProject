@@ -66,6 +66,6 @@ export async function loadSampleSet(sample_set_tree, path_to_sample_set) {
             i++;
         }
     });
-    console.log(sample_set)
+
     return sample_set;
 }
