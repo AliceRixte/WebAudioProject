@@ -45,7 +45,7 @@ export async function loadWav(url) {
     return buffer;
 }
 
-export async function loadSampleSet(sample_set_tree, path_to_sample_set, audio_context) {
+export async function loadSampleSet(sample_set_tree, path_to_sample_set) {
     var sample_set = await getJSON(path_to_sample_set + "/metaData.json");
     sample_set["samples"] = [[], [], [], []];
     sample_set["sample_names"] = [[], [], [], []];
