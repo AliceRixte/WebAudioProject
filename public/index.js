@@ -32,8 +32,6 @@ const callback = async function () {
 
 
 
-
-
 function loadGrid () {
     var $grid = [[], [], [], []];
     for (var i = 0; i < CATEGORIES_PER_SET; i++) {
@@ -83,18 +81,21 @@ function gridPlacement() {
 
 }
 
-function playSound(buffer, time, context) {
+function playSound(buffer, time, duration, context) {
   var source = context.createBufferSource();
   source.buffer = buffer;
   source.connect(context.destination);
   source.start(time);
+  source.stop(time+duration);
 }
+
+
+const patternLength = 1;
 
 
 const main = async () => {
 
     const $grid = loadGrid();
-    console.log($grid[0,0]);
 
 
 
@@ -133,41 +134,62 @@ const main = async () => {
     const sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
     document.querySelector("body").appendChild($choose_sample_set);
 
-    console.log(sample_set["samples"][0])
+    //Set color right
+    for (var catID = 0; catID < 4; catID++){
+      for (var boxID = 0; boxID<sample_set["sample_names"][catID].length; boxID++){
+        const newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-bright');
+        let myElement = document.querySelector("#sample-"+(catID*16+boxID).toString());
+        myElement.style.backgroundColor = 'rgb('+newColor+', 0.5)';
+      }
+    }
 
     let categoryBox = Array.from(document.querySelectorAll(".cat-container"));
     let boxes = document.querySelectorAll(".grid-cell");
 
+    let boxSelected = [0,0,0,0]
+
     categoryBox.forEach((cat, catID) => {
       Array.from(cat["children"]).forEach((box, boxID) => {
+        /*
         const playSample = async function (){
           const sampleBuffer = sample_set["samples"][catID][boxID].slice(0)
           audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
-              playSound(decodedData, 0, audio_context)
+              playSound(decodedData, audio_context.currentTime, patternLength, audio_context)
           });
         }
-        $grid[catID][boxID].addEventListener("click", playSample)
+        */
+        const selectBox = async function (){
+          boxSelected[catID] = boxID;
+          if (boxID < sample_set["sample_names"][catID].length){
+            const newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-dark');
+            let myElement = document.querySelector("#sample-"+(catID*16+boxID).toString());
+            myElement.style.backgroundColor = 'rgba('+newColor+', 0.5)';
+          }
+
+          for (var i = 0; i<sample_set["sample_names"][catID].length; i++){
+            if (i != boxID){
+              const newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-bright');
+              let myElement = document.querySelector("#sample-"+(catID*16+i).toString());
+              myElement.style.backgroundColor = 'rgb('+newColor+', 0.5)';
+            }
+          }
+
+        }
+        //$grid[catID][boxID].addEventListener("click", playSample);
+        $grid[catID][boxID].addEventListener("click", selectBox);
       })
     })
 
-    /*
-    const $grid = loadGrid();
-    console.log(sample_set["samples"]);
-    for (var i = 0; i < sample_set["samples"].length; i++) {
-        for (var j = 0; j < sample_set["samples"][i].length; j++) {
-
-            const playSample = async function () {
-                const sampleBuffer = sample_set["samples"][i][j].slice(0);
-                audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
-                    playSound(decodedData, 0, audio_context);
-                });
-            };
-            console.log(i, j);
-            $grid[i][j].addEventListener("click", playSample);
-        }
+    function playLoop () {
+      for (var i = 0; i<4; i++){
+        const sampleBuffer = sample_set["samples"][i][boxSelected[i]].slice(0)
+        audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
+            playSound(decodedData, audio_context.currentTime, patternLength, audio_context)
+        });
+      }
     }
-    */
 
+    var intervalID = window.setInterval(playLoop, patternLength*1000);
 
 }
 window.addEventListener('load', main);

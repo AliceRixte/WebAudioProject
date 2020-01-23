@@ -99,27 +99,8 @@ option {
     height: 100%;
 }
 
-#sample-0 {
-    background-color: rgba(var(--main-cat-color0-bright), 0.5);
-}
-#sample-15 {
-    background-color: rgba(var(--main-cat-color0-dark), 0.5);
-}
-#sample-16 {
-    background-color: rgba(var(--main-cat-color1-bright), 0.5);
-}
-#sample-32 {
-    background-color: rgba(var(--main-cat-color2-bright), 0.5);
-}
-#sample-48 {
-    background-color: rgba(var(--main-cat-color3-bright), 0.5);
-}
 
 span {
     display: table-cell;
     vertical-align: middle;
 }
-
-
-
-
