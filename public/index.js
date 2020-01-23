@@ -78,7 +78,6 @@ function gridPlacement() {
     $grid_container.style.top = top.toString() + "px";
 
     const $choose_sample_set = document.getElementById("choose-sample-set");
-    //console.log(grid_size.width);
     $choose_sample_set.style.top = Math.round((top - $choose_sample_set.clientHeight) / 2).toString() + "px";
     $choose_sample_set.style.left = Math.round((window_size.width - $choose_sample_set.clientWidth) / 2).toString() + "px";
 
@@ -95,7 +94,7 @@ function playSound(buffer, time, context) {
 const main = async () => {
 
     const $grid = loadGrid();
-    console.log($grid);
+    console.log($grid[0,0]);
 
 
 
@@ -114,7 +113,6 @@ const main = async () => {
     });
 
 
-
     gridPlacement();
 
 
@@ -128,17 +126,7 @@ const main = async () => {
         await audio_context.resume();
         resumed = true;
     }
-    /*
-    var source = audio_context.createBufferSource();
 
-    var buffer = await loadFiles.loadWav("sounds/Test1/Drums/test1_drums1.wav");
-    audio_context.decodeAudioData(buffer, function (decodedData) {
-        source.buffer = decodedData;
-        source.connect(audio_context.destination);
-    });
-    source.start(0);
-    source.stop(1);
-    */
 
     var current_sample_set = "Test1";
     var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
@@ -162,6 +150,23 @@ const main = async () => {
       })
     })
 
+    /*
+    const $grid = loadGrid();
+    console.log(sample_set["samples"]);
+    for (var i = 0; i < sample_set["samples"].length; i++) {
+        for (var j = 0; j < sample_set["samples"][i].length; j++) {
+
+            const playSample = async function () {
+                const sampleBuffer = sample_set["samples"][i][j].slice(0);
+                audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
+                    playSound(decodedData, 0, audio_context);
+                });
+            };
+            console.log(i, j);
+            $grid[i][j].addEventListener("click", playSample);
+        }
+    }
+    */
 
 
 }
