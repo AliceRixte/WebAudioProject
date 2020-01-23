@@ -55,11 +55,15 @@ export async function loadSampleSet(sample_set_tree, path_to_sample_set, audio_c
     Object.keys(sample_set_tree).forEach(category =>  {
         if (i < 4) {
             sample_set["category_names"].push(category);
-            sample_set_tree[category].forEach(async sample => {
-              sample_set["sample_names"][i].push(sample);
-              var sampleURL = path_to_sample_set + "/" + category + "/" + sample;
-              sample_set["samples"][i].push(await loadWav(sampleURL, audio_context));
-            });
+            console.log(category);
+            if (sample_set_tree[category]) {
+                sample_set_tree[category].forEach(async sample => {
+                    sample_set["sample_names"][i].push(sample);
+                    var sampleURL = path_to_sample_set + "/" + category + "/" + sample;
+                    sample_set["samples"][i].push(await loadWav(sampleURL, audio_context));
+                });
+            }
+
             i++;
         }
     });
