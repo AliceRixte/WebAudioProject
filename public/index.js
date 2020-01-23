@@ -151,18 +151,25 @@ const main = async () => {
     let categoryBox = Array.from(document.querySelectorAll(".cat-container"));
     let boxes = document.querySelectorAll(".grid-cell");
 
-    categoryBox.forEach((cat, catID) => {
-      Array.from(cat["children"]).forEach((box, boxID) => {
+    console.log(sample_set);
+    //console.log(sample_set["samples"][0][0].slice(0))
+  //  categoryBox.forEach((cat, catID) => {
+    //  Array.from(cat["children"]).forEach((box, boxID) => {
+
+    for (var i = 0; i<1; i++){
+      for (var j = 0; j<1; j++){
         const playSample = async function (){
-          const sampleBuffer = sample_set["samples"][catID][boxID].slice(0)
+          console.log(sample_set["samples"][0][0])
+          console.log(i,j)
+          const sampleBuffer = sample_set["samples"][i][j].slice(0);
+          //console.log(sample_set["samples"][0][0]);
           audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
               playSound(decodedData, 0, audio_context)
           });
         }
-        box.addEventListener("click", playSample)
-      })
-    })
-
+        $grid[i][j].addEventListener("click", playSample)
+      }
+    }
 
 
 }
