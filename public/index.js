@@ -128,37 +128,58 @@ const main = async () => {
         resumed = true;
     }
 
+    var sample_set
+
+    function setColorsInit (sample_set){
+      for (var catID = 0; catID < 4; catID++){
+        for (var boxID = 0; boxID<16; boxID++){
+          var newColor
+          console.log(sample_set["sample_names"][catID].length)
+          if (boxSelected[catID] == boxID && boxID <sample_set["sample_names"][catID].length){
+            newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-dark');
+          } else if (boxSelected[catID] != boxID && boxID <sample_set["sample_names"][catID].length){
+            newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-bright');
+          }
+          else{
+            newColor = '255,255,255';
+          }
+          let myElement = document.querySelector("#sample-"+(catID*16+boxID).toString());
+          myElement.style.backgroundColor = 'rgb('+newColor+', 0.5)';
+        }
+      }
+    }
+
+    async function reloadSampleSet () {
+      var current_sample_set = document.getElementById("choose-sample-set").options[document.getElementById("choose-sample-set").selectedIndex].text;
+      var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
+      sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"][current_sample_set], path_to_sample_set, audio_context);
+
+      console.log(sample_set)
+      setColorsInit(sample_set);
+
+    }
+
+
+
 
     var current_sample_set = "Test1";
     var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
-    const sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
+    sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
     document.querySelector("body").appendChild($choose_sample_set);
 
-    //Set color right
-    for (var catID = 0; catID < 4; catID++){
-      for (var boxID = 0; boxID<sample_set["sample_names"][catID].length; boxID++){
-        const newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-bright');
-        let myElement = document.querySelector("#sample-"+(catID*16+boxID).toString());
-        myElement.style.backgroundColor = 'rgb('+newColor+', 0.5)';
-      }
-    }
+
+    let boxSelected = [0,0,0,0]; //Which box is currently selected for each category
+
+    setColorsInit(sample_set);
 
     let categoryBox = Array.from(document.querySelectorAll(".cat-container"));
     let boxes = document.querySelectorAll(".grid-cell");
 
-    let boxSelected = [0,0,0,0]
 
     categoryBox.forEach((cat, catID) => {
       Array.from(cat["children"]).forEach((box, boxID) => {
-        /*
-        const playSample = async function (){
-          const sampleBuffer = sample_set["samples"][catID][boxID].slice(0)
-          audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
-              playSound(decodedData, audio_context.currentTime, patternLength, audio_context)
-          });
-        }
-        */
         const selectBox = async function (){
+          //Callback function to change colors of boxes when selecting a new one
           boxSelected[catID] = boxID;
           if (boxID < sample_set["sample_names"][catID].length){
             const newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-dark');
@@ -175,21 +196,29 @@ const main = async () => {
           }
 
         }
-        //$grid[catID][boxID].addEventListener("click", playSample);
         $grid[catID][boxID].addEventListener("click", selectBox);
       })
     })
 
     function playLoop () {
       for (var i = 0; i<4; i++){
-        const sampleBuffer = sample_set["samples"][i][boxSelected[i]].slice(0)
-        audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
-            playSound(decodedData, audio_context.currentTime, patternLength, audio_context)
-        });
+        if (sample_set["samples"][i][boxSelected[i]] !== undefined){
+          const sampleBuffer = sample_set["samples"][i][boxSelected[i]].slice(0)
+          audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
+              playSound(decodedData, audio_context.currentTime, patternLength, audio_context)
+          });
+        }
       }
     }
 
+
     var intervalID = window.setInterval(playLoop, patternLength*1000);
 
+    function listQ(){
+      const e = document.getElementById("choose-sample-set");
+      console.log();
+    }
+
+    document.getElementById("choose-sample-set").onchange = reloadSampleSet;
 }
 window.addEventListener('load', main);

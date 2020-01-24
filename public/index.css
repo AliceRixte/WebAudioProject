@@ -90,7 +90,7 @@ option {
 
 .inner-cell {
     display: table;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
     font-size: 30px;
     text-align: center;
