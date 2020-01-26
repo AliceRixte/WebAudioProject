@@ -75,8 +75,10 @@ function playSound(buffer, time, duration, context) {
     source.buffer = buffer;
     source.connect(context.destination);
     source.start(time);
-    source.stop(time + duration);
+    if(duration >= 0)
+        source.stop(time + duration);
 }
+
 
 
 
@@ -121,12 +123,30 @@ const main = async () => {
         resumed = true;
     }
 
+
     var sample_set;
 
-
-
-
     var intervalID;
+
+    function setColorsInit(sample_set) {
+        for (var catID = 0; catID < 4; catID++) {
+            for (var boxID = 0; boxID < 16; boxID++) {
+                var newColor;
+                if (boxID < sample_set["sample_names"][catID].length) {
+                    if (boxSelected[catID].indexOf(boxID) >= 0)
+                        newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-dark');
+                    else
+                        newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-bright');
+                }
+                else
+                    newColor = '255,255,255';
+                let myElement = document.querySelector("#sample-" + (catID * 16 + boxID).toString());
+                myElement.style.backgroundColor = 'rgba(' + newColor + ', 0.5)';
+            }
+        }
+    }
+
+
 
     async function loadSampleSet() {
         var current_sample_set = document.getElementById("choose-sample-set").options[document.getElementById("choose-sample-set").selectedIndex].text;
@@ -138,28 +158,7 @@ const main = async () => {
             clearInterval(intervalID)
         intervalID = window.setInterval(playLoop, patternLength(sample_set.bpm, sample_set.nb_beat) * 1000);
 
-
     }
-
-
-    function setColorsInit(sample_set) {
-        for (var catID = 0; catID < 4; catID++) {
-            for (var boxID = 0; boxID < 16; boxID++) {
-                var newColor;
-                if (boxID < sample_set["sample_names"][catID].length) {
-                    if (boxSelected[catID].indexOf(boxID) >= 0) 
-                        newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-dark');
-                    else 
-                        newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-bright');
-                }
-                else 
-                    newColor = '255,255,255';
-                let myElement = document.querySelector("#sample-" + (catID * 16 + boxID).toString());
-                myElement.style.backgroundColor = 'rgba(' + newColor + ', 0.5)';
-            }
-        }
-    }
-
 
     loadSampleSet();
 
@@ -170,11 +169,9 @@ const main = async () => {
     let boxSelected = [[], [], [], []]; //Which box is currently selected for each category
 
 
-
+    //Set behaviour when clicking on each box
     let categoryBox = Array.from(document.querySelectorAll(".cat-container"));
     let boxes = document.querySelectorAll(".grid-cell");
-
-
     categoryBox.forEach((cat, catID) => {
         Array.from(cat["children"]).forEach((box, boxID) => {
             //Callback function to change colors of boxes when selecting a new one
@@ -212,8 +209,11 @@ const main = async () => {
                     if (sample_set["repeat"][i] || !played_already[i][j]) {
                         const sampleBuffer = sample_set["samples"][i][j].slice(0);
                         played_already[i][j] = true;
+                        var duration = patternLength(sample_set.bpm, sample_set.nb_beat);
+                        if (!sample_set["repeat"][i])
+                            duration = -1;
                         audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
-                            playSound(decodedData, audio_context.currentTime, patternLength(sample_set.bpm, sample_set.nb_beat), audio_context)
+                            playSound(decodedData, audio_context.currentTime, duration, audio_context)
                         });
                     }
                     else {
@@ -227,8 +227,6 @@ const main = async () => {
             });
         }
     }
-
-
 
 
     function listQ() {
