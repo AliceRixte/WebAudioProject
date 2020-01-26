@@ -129,12 +129,12 @@ const main = async () => {
     }
 
     var sample_set
+    let boxSelected = [-1,-1,-1,-1];
 
-    function setColorsInit (sample_set){
+    function setColors (sample_set){
       for (var catID = 0; catID < 4; catID++){
         for (var boxID = 0; boxID<16; boxID++){
           var newColor
-          console.log(sample_set["sample_names"][catID].length)
           if (boxSelected[catID] == boxID && boxID <sample_set["sample_names"][catID].length){
             newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-dark');
           } else if (boxSelected[catID] != boxID && boxID <sample_set["sample_names"][catID].length){
@@ -149,52 +149,49 @@ const main = async () => {
       }
     }
 
-    async function reloadSampleSet () {
+
+    async function loadSampleSet () {
       var current_sample_set = document.getElementById("choose-sample-set").options[document.getElementById("choose-sample-set").selectedIndex].text;
       var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
       sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"][current_sample_set], path_to_sample_set, audio_context);
 
-      console.log(sample_set)
-      setColorsInit(sample_set);
+      setColors(sample_set);
 
+
+      console.log(sample_set);
     }
 
 
+    var current_sample_set = Object.keys(file_tree["sample_sets"])[0];
+    loadSampleSet();
+    // var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
+    // sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"][current_sample_set], path_to_sample_set, audio_context);
+    // document.querySelector("body").appendChild($choose_sample_set);
 
 
-    var current_sample_set = "Test1";
-    var path_to_sample_set = file_tree["path_to_sounds"] + "/" + current_sample_set;
-    sample_set = await loadFiles.loadSampleSet(file_tree["sample_sets"]["Test1"], path_to_sample_set, audio_context);
-    document.querySelector("body").appendChild($choose_sample_set);
+    //Which box is currently selected for each category
+
+    //setColors(sample_set);
 
 
-    let boxSelected = [0,0,0,0]; //Which box is currently selected for each category
-
-    setColorsInit(sample_set);
-
+    //Set behaviour when clicking on each box
     let categoryBox = Array.from(document.querySelectorAll(".cat-container"));
     let boxes = document.querySelectorAll(".grid-cell");
-
-
     categoryBox.forEach((cat, catID) => {
       Array.from(cat["children"]).forEach((box, boxID) => {
         const selectBox = async function (){
-          //Callback function to change colors of boxes when selecting a new one
-          boxSelected[catID] = boxID;
-          if (boxID < sample_set["sample_names"][catID].length){
-            const newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-dark');
-            let myElement = document.querySelector("#sample-"+(catID*16+boxID).toString());
-            myElement.style.backgroundColor = 'rgba('+newColor+', 0.5)';
+          //Callback function for when clicking on box
+
+          //Change selected box
+          let previousBoxSelected = boxSelected[catID];
+          if (previousBoxSelected == boxID){
+            boxSelected[catID] = -1;
+          } else{
+            boxSelected[catID] = boxID;
           }
 
-          for (var i = 0; i<sample_set["sample_names"][catID].length; i++){
-            if (i != boxID){
-              const newColor = getComputedStyle(document.documentElement).getPropertyValue('--main-cat-color' + catID.toString() + '-bright');
-              let myElement = document.querySelector("#sample-"+(catID*16+i).toString());
-              myElement.style.backgroundColor = 'rgb('+newColor+', 0.5)';
-            }
-          }
-
+          //Change colors
+          setColors(sample_set);
         }
         $grid[catID][boxID].addEventListener("click", selectBox);
       })
@@ -202,7 +199,7 @@ const main = async () => {
 
     function playLoop () {
       for (var i = 0; i<4; i++){
-        if (sample_set["samples"][i][boxSelected[i]] !== undefined){
+        if (sample_set["samples"][i][boxSelected[i]] !== undefined && boxSelected[i] != -1){
           const sampleBuffer = sample_set["samples"][i][boxSelected[i]].slice(0)
           audio_context.decodeAudioData(sampleBuffer, function (decodedData) {
               playSound(decodedData, audio_context.currentTime, patternLength, audio_context)
@@ -214,11 +211,6 @@ const main = async () => {
 
     var intervalID = window.setInterval(playLoop, patternLength*1000);
 
-    function listQ(){
-      const e = document.getElementById("choose-sample-set");
-      console.log();
-    }
-
-    document.getElementById("choose-sample-set").onchange = reloadSampleSet;
+    document.getElementById("choose-sample-set").onchange = loadSampleSet;
 }
 window.addEventListener('load', main);

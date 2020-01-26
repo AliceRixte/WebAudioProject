@@ -85,7 +85,9 @@ option {
 
 .grid-cell {
     background-color: rgba(0, 0, 0, 0);
-    padding: 2px
+    padding: 2px;
+    cursor: pointer;
+    user-select: none;
 }
 
 .inner-cell {
