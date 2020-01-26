@@ -11,4 +11,5 @@
 ### Mac OS
 
 * Install Node
+* Install express using "npm install express"
 * Go to the main directory using terminal and execute "node app.js"
