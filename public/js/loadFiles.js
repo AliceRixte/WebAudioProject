@@ -35,13 +35,6 @@ export async function loadWav(url) {
     const request = new Request(url, initFromHeaders(WavHeaders));
     const response = await fetch(request);
     const buffer = await response.arrayBuffer();
-   /* var source = audio_context.createBufferSource();
-
-    audio_context.decodeAudioData(buffer, function (decodedData) {
-            source.buffer = decodedData;
-            source.connect(audio_context.destination);
-    });*/
-
     return buffer;
 }
 
@@ -50,6 +43,10 @@ export async function loadSampleSet(sample_set_tree, path_to_sample_set) {
     sample_set["samples"] = [[], [], [], []];
     sample_set["sample_names"] = [[], [], [], []];
     sample_set["category_names"] = [];
+
+    // TODO JSON for categories
+    sample_set["repeat"] = [true, true, false, true];
+    sample_set["simultaneous_samples"] = [1, 1, 3, 3];
 
     var i = 0;
     Object.keys(sample_set_tree).forEach(category =>  {
