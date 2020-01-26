@@ -8,3 +8,7 @@
 * Launch the solution file.
 * Press F5.
 
+### Mac OS
+
+* Install Node
+* Go to the main directory using terminal and execute "node app.js"
