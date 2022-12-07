@@ -10,7 +10,7 @@
     "name": "Th�o Golvet, Alice Rixte"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "xpress": "^2.4.6"
   }
 }
